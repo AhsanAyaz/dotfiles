@@ -30,7 +30,6 @@ return {
         "dockerls",
         "yamlls",
         "python-lsp-server",
-
         -- "ruby_lsp",            -- Keep if you use Ruby
         -- Add Angular Language Service if needed (often works well with tsserver, but can provide more Angular specifics)
         "angularls",
