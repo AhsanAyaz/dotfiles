@@ -27,6 +27,16 @@ return {
     git = { enabled = true },
     picker = {
       enabled = true,
+      sources = {
+        explorer = {
+          hidden = true,
+          ignored = true,
+        },
+        files = {
+          hidden = true,
+          ignored = true,
+        },
+      },
       win = {
         input = {
           keys = {

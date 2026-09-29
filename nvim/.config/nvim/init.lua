@@ -13,3 +13,6 @@ vim.opt.rtp:prepend(lazypath)
 
 require("vim-options")
 require("lazy").setup("plugins")
+
+vim.keymap.set('n', '<leader>th', ':term<CR>')
+vim.keymap.set('n', '<leader>tv', ':vsp | term<CR>')

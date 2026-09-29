@@ -1,6 +1,4 @@
-eval "$(starship init zsh)"
-export EDITOR="nvim"
-export SUDO_EDITOR="$EDITOR"
+export SUDO_EDITOR="nvim"
 export PGHOST="/var/run/postgresql"
 
 export PATH=$PATH:/usr/local/go/bin
@@ -11,12 +9,9 @@ SAVEHIST=50000
 
 setopt inc_append_history
 
-. "$HOME/.asdf/asdf.sh"
-
-# append completions to fpath
-fpath=(${ASDF_DIR}/completions $fpath)
-# initialise completions with ZSH's compinit
 autoload -Uz compinit && compinit
 
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# Shared aliases, functions and tool init (stow package: zsh-common)
+[ -f ~/.config/zsh/common.zsh ] && source ~/.config/zsh/common.zsh
