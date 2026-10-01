@@ -54,5 +54,27 @@ function kdo() {
   ps ax|grep -i docker|egrep -iv 'grep|com.docker.vmnetd'|awk '{print $1}'|xargs kill
 }
 
+# Mac mini over Tailscale (ssh host alias `mini`). Shut it down before unplugging:
+# cutting power corrupts the Docker databases. Relies on /etc/sudoers.d/shutdown there.
+function mini-power() {
+  local cmd="${1:-status}" sock="$SSH_AUTH_SOCK"
+  # Reuse the agent from `ssh-agent -a ~/.ssh/agent.sock` if there is one; else ssh asks for the key passphrase.
+  [ -S "$HOME/.ssh/agent.sock" ] && sock="$HOME/.ssh/agent.sock"
+  if [[ "$cmd" == "off" ]]; then
+    read -q "?Shut down the Mac mini? Blog and Postiz stay down until someone presses its power button. [y/N] " || { echo; return 1; }
+    echo
+    SSH_AUTH_SOCK="$sock" ssh mini 'sudo -n shutdown -h now'
+    echo "Shutdown sent. Wait ~30s before unplugging."
+  elif [[ "$cmd" == "reboot" ]]; then
+    SSH_AUTH_SOCK="$sock" ssh mini 'sudo -n shutdown -r now'
+    echo "Reboot sent. Services are back about a minute after boot."
+  elif [[ "$cmd" == "status" ]]; then
+    SSH_AUTH_SOCK="$sock" ssh -o ConnectTimeout=8 mini 'uptime' || echo "Mac mini unreachable (off, or Tailscale down)."
+  else
+    echo "Usage: mini-power [status|off|reboot]"
+  fi
+}
+alias mini-off='mini-power off'
+
 command -v starship >/dev/null && eval "$(starship init zsh)"
 command -v zoxide >/dev/null && eval "$(zoxide init zsh)"
